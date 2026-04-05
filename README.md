@@ -37,6 +37,23 @@
 
 2. **Configura el token de Bitbucket:**
 
+有两种方式配置 token：
+
+#### Opción A: Archivo `.env` (Recomendado)
+
+```bash
+# Copia el ejemplo y configura tu token
+cp .env.example .env
+# Edita el archivo .env y reemplaza tu_token_aqui con tu token real
+```
+
+El contenido de `.env` debe ser:
+```
+BB_TOKEN=tu_token_de_bitbucket
+```
+
+#### Opción B: Variable de entorno
+
 ```bash
 # Exporta el token (añade esto a tu ~/.bashrc o ~/.zshrc para persistencia)
 export BB_TOKEN="tu_token_de_bitbucket"
@@ -44,6 +61,8 @@ export BB_TOKEN="tu_token_de_bitbucket"
 # O ejecuta directamente antes de correr el programa
 BB_TOKEN="tu_token_de_bitbucket" python3 repository_manager.py
 ```
+
+> ⚠️ **Nota:** El archivo `.env` contiene información sensible y está excluido del repositorio (`gitignore`). Nunca compartas este archivo.
 
 #### ¿Cómo obtener tu token de Bitbucket?
 
@@ -84,9 +103,11 @@ python3 repository_manager.py
 ```
 bitbucket-repo-manager/
 ├── repository_manager.py   # Código principal de la aplicación
-├── run.sh                 # Script de ejecución
-├── README.md              # Este archivo
-└── .gitignore             # Ignora archivos sensibles
+├── run.sh                  # Script de ejecución
+├── .env                    # Tu configuración (NO subir a git)
+├── .env.example            # Ejemplo de configuración
+├── README.md               # Este archivo
+└── .gitignore              # Ignora archivos sensibles
 ```
 
 ---
@@ -116,8 +137,12 @@ USERNAME = "otro_workspace"
 
 ### Error: "BB_TOKEN no está configurado"
 
-Asegúrate de haber exportado la variable de entorno:
+Asegúrate de tener el token configurado:
 ```bash
+# Opción 1: Verifica que el archivo .env existe
+cat .env
+
+# Opción 2: O exporta la variable manualmente
 export BB_TOKEN="tu_token"
 ./run.sh
 ```
