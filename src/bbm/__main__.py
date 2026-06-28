@@ -1,4 +1,4 @@
-from bbm.cli import main
+from bbm.tui import run_tui
 
 if __name__ == "__main__":
-    main()
+    run_tui()

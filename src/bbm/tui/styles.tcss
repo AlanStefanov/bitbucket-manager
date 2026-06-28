@@ -1,0 +1,348 @@
+Screen {
+    background: #0a0a0a;
+}
+
+ScrollableContainer {
+    height: 1fr;
+}
+
+/* ── Screen layout ──────────────────────────────────────── */
+.screen-root {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.screen-title {
+    text-style: bold;
+    color: #10b981;
+    padding: 0 2;
+    height: 1;
+}
+
+.screen-subtitle {
+    color: #555;
+    padding: 0 2;
+    height: 1;
+    margin-bottom: 1;
+}
+
+/* ── Bottom action bar ──────────────────────────────────── */
+.action-bar {
+    dock: bottom;
+    height: 3;
+    background: #111;
+    border-top: solid #1a1a1a;
+    padding: 0 1;
+    align: center middle;
+}
+
+.action-bar Button {
+    background: #1a1a1a;
+    color: #d4d4d4;
+    border: solid #333;
+    height: 3;
+    min-width: 12;
+    margin: 0 1;
+}
+
+.action-bar Button:hover {
+    border: solid #10b981;
+    background: #222;
+}
+
+.action-bar Button:focus {
+    border: solid #10b981;
+}
+
+.action-bar Button.-primary {
+    background: #10b981;
+    color: #000;
+    border: none;
+}
+
+.action-bar Button.-primary:hover {
+    background: #34d399;
+}
+
+.action-bar Button.-error {
+    background: #dc2626;
+    color: #fff;
+    border: none;
+}
+
+.action-bar Button.-error:hover {
+    background: #ef4444;
+}
+
+.action-bar Button.-warning {
+    background: #f59e0b;
+    color: #000;
+    border: none;
+}
+
+/* ── Status bar ─────────────────────────────────────────── */
+.status-bar {
+    dock: bottom;
+    height: 1;
+    background: #0a0a0a;
+    color: #555;
+    padding: 0 2;
+}
+
+/* ── Home Screen ────────────────────────────────────────── */
+#home-root {
+    align: center top;
+    width: 100%;
+    height: 100%;
+}
+
+#home-brand {
+    text-style: bold;
+    color: #10b981;
+    text-align: center;
+    height: 4;
+    margin-top: 1;
+}
+
+#home-title {
+    color: #555;
+    text-align: center;
+    height: 1;
+}
+
+#home-cards {
+    width: 100%;
+    max-width: 96;
+    height: auto;
+    margin: 1 2;
+}
+
+.card-row {
+    height: auto;
+}
+
+.card {
+    width: 1fr;
+    height: 7;
+    border: solid #1f1f1f;
+    margin: 1;
+    padding: 1 2;
+    background: #111;
+}
+
+.card.-focused {
+    border: solid #10b981;
+    background: #161616;
+}
+
+.card:hover {
+    border: solid #10b981;
+    background: #161616;
+}
+
+.card-icon {
+    text-style: bold;
+    height: 2;
+}
+
+.card-title {
+    text-style: bold;
+    color: #d4d4d4;
+    height: 1;
+}
+
+.card-desc {
+    color: #555;
+    height: 2;
+}
+
+#home-hints {
+    color: #555;
+    text-align: center;
+    height: 1;
+    margin-bottom: 1;
+}
+
+.home-key {
+    color: #10b981;
+}
+
+/* ── DataTable ──────────────────────────────────────────── */
+DataTable {
+    height: 1fr;
+    background: #111;
+    margin: 0 1;
+    border: solid #1a1a1a;
+}
+
+DataTable > .datatable--header {
+    background: #1a1a1a;
+    color: #10b981;
+    text-style: bold;
+}
+
+DataTable > .datatable--cursor {
+    background: #10b981;
+    color: #000;
+}
+
+DataTable > .datatable--hover {
+    background: #1a3030;
+}
+
+/* ── Buttons (standalone) ───────────────────────────────── */
+Button {
+    background: #1a1a1a;
+    color: #d4d4d4;
+    border: solid #333;
+    height: 3;
+    margin: 0 1;
+}
+
+Button:hover {
+    border: solid #10b981;
+    background: #222;
+}
+
+Button:focus {
+    border: solid #10b981;
+}
+
+/* ── Input ──────────────────────────────────────────────── */
+Input {
+    background: #1a1a1a;
+    color: #d4d4d4;
+    border: solid #333;
+    height: 3;
+    margin: 0 1;
+}
+
+Input:focus {
+    border: solid #10b981;
+}
+
+Input > .input--placeholder {
+    color: #555;
+}
+
+/* ── Select ──────────────────────────────────────────────── */
+Select {
+    background: #1a1a1a;
+    color: #d4d4d4;
+    border: solid #333;
+    height: 3;
+    margin: 0 1;
+}
+
+Select:focus {
+    border: solid #10b981;
+}
+
+Select > .select--button {
+    background: #1a1a1a;
+    color: #d4d4d4;
+}
+
+Select > .select--button:hover {
+    background: #222;
+}
+
+/* ── Labels ─────────────────────────────────────────────── */
+Label {
+    color: #666;
+    padding: 0 1;
+    height: 1;
+    margin-top: 1;
+}
+
+/* ── Static output ──────────────────────────────────────── */
+.output-box {
+    background: #0d0d0d;
+    border: solid #1a1a1a;
+    color: #d4d4d4;
+    height: 1fr;
+    margin: 0 1 1 1;
+    padding: 1;
+    overflow-y: auto;
+}
+
+/* ── Form panel ─────────────────────────────────────────── */
+.form-panel {
+    width: 40;
+    height: auto;
+    margin: 0 1;
+    padding: 1;
+    border: solid #1a1a1a;
+    background: #111;
+}
+
+.form-actions {
+    height: auto;
+    margin-top: 1;
+    padding: 0 1;
+}
+
+.form-actions Button {
+    min-width: 10;
+}
+
+/* ── Content area (left/right split) ────────────────────── */
+.content-area {
+    height: 1fr;
+}
+
+/* ── Sidebar panel for feature screens ──────────────────── */
+.sidebar {
+    width: 38;
+    height: 1fr;
+    border: solid #1a1a1a;
+    background: #111;
+    margin: 0 1;
+    padding: 1;
+}
+
+/* ── Main area for feature screens ──────────────────────── */
+.main-area {
+    height: 1fr;
+}
+
+/* ── Loading text ───────────────────────────────────────── */
+.loading {
+    color: #22d3ee;
+    text-align: center;
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+Footer {
+    background: #111;
+    color: #555;
+}
+
+Footer > .footer--key {
+    color: #10b981;
+}
+
+Footer > .footer--description {
+    color: #555;
+}
+
+/* ── Compact mode for home ──────────────────────────────── */
+.-compact .card {
+    height: 6;
+}
+
+.-compact #home-cards {
+    max-width: 100%;
+}
+
+.-ultra-compact .card-icon {
+    height: 1;
+}
+
+.-ultra-compact .card-desc {
+    display: none;
+}
+
+.-ultra-compact .card-title {
+    height: 2;
+}
