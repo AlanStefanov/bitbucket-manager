@@ -10,7 +10,10 @@ readme = "README.md"
 authors = [{name = "Alan Stefanov", email = "alan.emanuel.stefanov@gmail.com"}]
 license = {text = "MIT"}
 requires-python = ">=3.8"
-dependencies = ["requests"]
+dependencies = [
+    "requests",
+    "pyyaml",
+]
 keywords = ["bitbucket", "cli", "tui", "devops", "repository-manager"]
 classifiers = [
     "Development Status :: 3 - Alpha",

@@ -170,3 +170,143 @@ def delete_group_permission(workspace, repo, group):
         return False, f"HTTP {r.status_code}: {r.text[:200]}"
     except Exception as e:
         return False, str(e)
+
+
+# ─── PRs ────────────────────────────────────────────────────────────────────
+
+def get_pullrequests(workspace, repo, state='OPEN', limit=50):
+    auth = _auth()
+    if not auth:
+        return None
+    url = f"{BASE_URL}/repositories/{workspace}/{repo}/pullrequests?state={state}&pagelen={limit}"
+    try:
+        r = requests.get(url, auth=auth, timeout=10)
+        if r.status_code == 200:
+            return r.json().get('values', [])
+        print(f"  Error al obtener PRs: {r.status_code}")
+        return None
+    except Exception as e:
+        print(f"  Error de conexión: {e}")
+        return None
+
+
+def approve_pullrequest(workspace, repo, pr_id):
+    auth = _auth()
+    if not auth:
+        return False, "Credenciales no configuradas"
+    url = f"{BASE_URL}/repositories/{workspace}/{repo}/pullrequests/{pr_id}/approve"
+    try:
+        r = requests.post(url, auth=auth, timeout=10)
+        if r.status_code in (200, 201, 204):
+            return True, None
+        return False, f"HTTP {r.status_code}: {r.text[:200]}"
+    except Exception as e:
+        return False, str(e)
+
+
+def unapprove_pullrequest(workspace, repo, pr_id):
+    auth = _auth()
+    if not auth:
+        return False, "Credenciales no configuradas"
+    url = f"{BASE_URL}/repositories/{workspace}/{repo}/pullrequests/{pr_id}/approve"
+    try:
+        r = requests.delete(url, auth=auth, timeout=10)
+        if r.status_code in (200, 204):
+            return True, None
+        return False, f"HTTP {r.status_code}: {r.text[:200]}"
+    except Exception as e:
+        return False, str(e)
+
+
+def get_branches(workspace, repo, limit=100):
+    auth = _auth()
+    if not auth:
+        return None
+    url = f"{BASE_URL}/repositories/{workspace}/{repo}/refs/branches?pagelen={limit}"
+    try:
+        r = requests.get(url, auth=auth, timeout=10)
+        if r.status_code == 200:
+            return r.json().get('values', [])
+        print(f"  Error al obtener branches: {r.status_code}")
+        return None
+    except Exception as e:
+        print(f"  Error de conexión: {e}")
+        return None
+
+
+def create_repository(workspace, repo_name, is_private=True):
+    auth = _auth()
+    if not auth:
+        return False, "Credenciales no configuradas"
+    url = f"{BASE_URL}/repositories/{workspace}/{repo_name}"
+    try:
+        r = requests.post(url, auth=auth,
+                          json={"scm": "git", "is_private": is_private}, timeout=15)
+        if r.status_code in (200, 201):
+            return True, r.json()
+        return False, f"HTTP {r.status_code}: {r.text[:200]}"
+    except Exception as e:
+        return False, str(e)
+
+
+def update_repository(workspace, repo, data):
+    auth = _auth()
+    if not auth:
+        return False, "Credenciales no configuradas"
+    url = f"{BASE_URL}/repositories/{workspace}/{repo}"
+    try:
+        r = requests.put(url, auth=auth, json=data, timeout=10)
+        if r.status_code == 200:
+            return True, None
+        return False, f"HTTP {r.status_code}: {r.text[:200]}"
+    except Exception as e:
+        return False, str(e)
+
+
+def get_workspace_projects(workspace):
+    auth = _auth()
+    if not auth:
+        return None
+    url = f"{BASE_URL}/workspaces/{workspace}/projects"
+    try:
+        r = requests.get(url, auth=auth, timeout=10)
+        if r.status_code == 200:
+            return r.json().get('values', [])
+        print(f"  Error al obtener proyectos: {r.status_code}")
+        return None
+    except Exception as e:
+        print(f"  Error de conexión: {e}")
+        return None
+
+
+def upsert_workspace_project(workspace, project_key, name, description=""):
+    auth = _auth()
+    if not auth:
+        return None
+    url = f"{BASE_URL}/workspaces/{workspace}/projects/{project_key}"
+    try:
+        r = requests.put(url, auth=auth,
+                         json={"name": name, "key": project_key, "description": description},
+                         timeout=10)
+        if r.status_code in (200, 201):
+            return r.json()
+        print(f"  Error al crear/actualizar proyecto: {r.status_code}")
+        return None
+    except Exception as e:
+        print(f"  Error de conexión: {e}")
+        return None
+
+
+def get_repository(workspace, repo):
+    auth = _auth()
+    if not auth:
+        return None
+    url = f"{BASE_URL}/repositories/{workspace}/{repo}"
+    try:
+        r = requests.get(url, auth=auth, timeout=10)
+        if r.status_code == 200:
+            return r.json()
+        return None
+    except Exception as e:
+        print(f"  Error de conexión: {e}")
+        return None
