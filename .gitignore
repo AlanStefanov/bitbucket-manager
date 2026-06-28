@@ -24,3 +24,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local planning docs (not for remote)
+docs/
