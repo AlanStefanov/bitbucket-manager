@@ -42,19 +42,19 @@ class DashboardScreen(Screen):
                 classes="dash-box",
             ),
             Vertical(
-                Static("[bold]PRs abiertos[/]", classes="dash-metric-label"),
+                Static("[bold]PRs abiertos (escaneados)[/]", classes="dash-metric-label"),
                 Static("0", id="dash-prs", classes="dash-metric-value"),
                 id="dash-box-prs",
                 classes="dash-box",
             ),
             Vertical(
-                Static("[bold]Actividad reciente[/]", classes="dash-metric-label"),
+                Static("[bold]Actividad reciente (escaneados)[/]", classes="dash-metric-label"),
                 Static("0", id="dash-active", classes="dash-metric-value"),
                 id="dash-box-active",
                 classes="dash-box",
             ),
             Vertical(
-                Static("[bold]Sin actividad (90d)[/]", classes="dash-metric-label"),
+                Static("[bold]Sin actividad 90d (escaneados)[/]", classes="dash-metric-label"),
                 Static("0", id="dash-stale", classes="dash-metric-value"),
                 id="dash-box-stale",
                 classes="dash-box",

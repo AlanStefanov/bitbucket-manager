@@ -5,7 +5,7 @@ import asyncio
 from textual.app import ComposeResult
 from textual.containers import Center, Vertical
 from textual.screen import Screen
-from textual.widgets import Static
+from textual.widgets import Footer, Static
 
 from ..version import VERSION
 
@@ -47,6 +47,7 @@ class BootScreen(Screen):
             ),
             id="boot-root",
         )
+        yield Footer()
 
     async def on_mount(self) -> None:
         asyncio.create_task(self._boot_seq())

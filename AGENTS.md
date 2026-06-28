@@ -14,13 +14,13 @@
 |-------|--------|
 | `H` / `Esc` | Home |
 | `Ctrl+Q` | Salir |
-| `F1` | Dashboard |
-| `F2` | Repos |
-| `F3` | Permisos |
-| `F4` | PRs |
-| `F5` | Migración |
-| `F6` | Archive |
-| `F7` | Dependencias |
+| `D` | Dashboard |
+| `R` | Repos |
+| `P` | Permisos |
+| `U` | PRs |
+| `M` | Migración |
+| `A` | Archive |
+| `S` | Dependencias |
 
 ## Files
 `src/bbm/tui/dashboard_screen.py` — nueva pantalla de métricas

@@ -138,14 +138,14 @@ La app está diseñada para uso 100% con teclado. Sin mouse requerido.
 | `↑` / `↓` | Navegar entre cards |
 | `←` / `→` | Navegar entre cards |
 | `Tab` / `Shift+Tab` | Navegar entre cards |
-| `Enter` | Abrir pantalla seleccionada |
-| `F1` | Dashboard |
-| `F2` | Repos |
-| `F3` | Permisos |
-| `F4` | PRs |
-| `F5` | Migración |
-| `F6` | Archive |
-| `F7` | Dependencias |
+| `Enter` / `Space` | Abrir pantalla seleccionada |
+| `D` | Dashboard |
+| `R` | Repos |
+| `P` | Permisos |
+| `U` | PRs |
+| `M` | Migración |
+| `A` | Archive |
+| `S` | Dependencias |
 | `Q` | Salir de la app |
 | `Esc` | Salir de la app |
 | `Ctrl+Q` | Salir de la app |
