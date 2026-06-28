@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from textual.app import ComposeResult
-from textual.containers import Horizontal, Vertical
+from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.events import Resize
 from textual.screen import Screen
 from textual.widgets import Footer, Static
+from textual.binding import Binding
 
 from ..version import VERSION
 
@@ -61,24 +62,24 @@ class FeatureCard(Vertical):
 
 class HomeScreen(Screen):
     BINDINGS = [
-        ("enter", "open", "Abrir"),
-        ("up", "up", "Arriba"),
-        ("down", "down", "Abajo"),
-        ("left", "left", "Izquierda"),
-        ("right", "right", "Derecha"),
-        ("tab", "tab", "Siguiente"),
-        ("shift+tab", "shift_tab", "Anterior"),
-        ("space", "open", "Abrir"),
-        ("d", "go_dashboard", "Dashboard"),
-        ("r", "go_explorer", "Repos"),
-        ("p", "go_permissions", "Permisos"),
-        ("u", "go_pr", "PRs"),
-        ("m", "go_migration", "Migración"),
-        ("a", "go_archive", "Archive"),
-        ("s", "go_deps", "Deps"),
-        ("q", "quit_app", "Salir"),
-        ("escape", "quit_app", "Salir"),
-        ("ctrl+q", "quit_app", "Salir"),
+        Binding("enter", "open", "Abrir", show=False),
+        Binding("up", "up", "Arriba", show=False),
+        Binding("down", "down", "Abajo", show=False),
+        Binding("left", "left", "Izquierda", show=False),
+        Binding("right", "right", "Derecha", show=False),
+        Binding("tab", "tab", "Siguiente", show=False),
+        Binding("shift+tab", "shift_tab", "Anterior", show=False),
+        Binding("space", "open", "Abrir"),
+        Binding("d", "go_dashboard", "Dashboard"),
+        Binding("r", "go_explorer", "Repos"),
+        Binding("p", "go_permissions", "Permisos"),
+        Binding("u", "go_pr", "PRs"),
+        Binding("m", "go_migration", "Migración"),
+        Binding("a", "go_archive", "Archive"),
+        Binding("s", "go_deps", "Deps"),
+        Binding("q", "quit_app", "Salir"),
+        Binding("escape", "quit_app", "Salir", show=False),
+        Binding("ctrl+q", "quit_app", "Salir", show=False),
     ]
 
     def compose(self) -> ComposeResult:
@@ -91,20 +92,18 @@ class HomeScreen(Screen):
                 rows.append(Horizontal(*cur, classes="card-row"))
                 cur = []
 
-        yield Vertical(
-            Static(
-                "[bold #10b981]██████╗  ██████╗ ███╗   ███╗[/]"
-                "\n[bold #10b981]██╔══██╗ ██╔══██╗████╗ ████║[/]"
-                "\n[bold #10b981]██████╔╝ ██████╔╝██╔████╔██║[/]"
-                "\n[bold #10b981]██╔══██╗ ██╔══██╗██║╚██╔╝██║[/]"
-                "\n[bold #10b981]██████╔╝ ██║  ██║██║ ╚═╝ ██║[/]"
-                "\n[bold #10b981]╚═════╝  ╚═╝  ╚═╝╚═╝     ╚═╝[/]",
-                id="home-brand",
-            ),
-            Static(f"[dim]Bitbucket Repository Manager  v{VERSION}[/]", id="home-title"),
-            Vertical(*rows, id="home-cards"),
-            id="home-root",
+        yield Static(
+            "[bold #10b981]██████╗  ██████╗ ███╗   ███╗[/]"
+            "\n[bold #10b981]██╔══██╗ ██╔══██╗████╗ ████║[/]"
+            "\n[bold #10b981]██████╔╝ ██████╔╝██╔████╔██║[/]"
+            "\n[bold #10b981]██╔══██╗ ██╔══██╗██║╚██╔╝██║[/]"
+            "\n[bold #10b981]██████╔╝ ██║  ██║██║ ╚═╝ ██║[/]"
+            "\n[bold #10b981]╚═════╝  ╚═╝  ╚═╝╚═╝     ╚═╝[/]",
+            id="home-brand",
         )
+        yield Static(f"[dim]Bitbucket Repository Manager  v{VERSION}[/]", id="home-title")
+        for row in rows:
+            yield row
         yield Footer()
 
     def on_mount(self) -> None:
@@ -118,15 +117,14 @@ class HomeScreen(Screen):
         self._apply_responsive(event.size.width, event.size.height)
 
     def _apply_responsive(self, w: int, h: int) -> None:
-        root = self.query_one("#home-root", Vertical)
         if w < 90 or h < 30:
-            root.add_class("-compact")
+            self.add_class("-compact")
         else:
-            root.remove_class("-compact")
+            self.remove_class("-compact")
         if w < 65 or h < 24:
-            root.add_class("-ultra-compact")
+            self.add_class("-ultra-compact")
         else:
-            root.remove_class("-ultra-compact")
+            self.remove_class("-ultra-compact")
 
     def _cards(self) -> list[FeatureCard]:
         return list(self.query(FeatureCard))
