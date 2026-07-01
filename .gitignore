@@ -5,9 +5,13 @@
 # Python
 __pycache__/
 *.py[cod]
-*.egg-info/
+*$py.class
+*.so
+.Python
+venv/
+ENV/
 dist/
-build/
+*.egg-info/
 *.egg
 
 # OS
@@ -26,3 +30,6 @@ Thumbs.db
 
 # Local runtime / secrets
 publish.sh
+
+# Local planning docs (not for remote)
+docs/

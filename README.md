@@ -1,265 +1,278 @@
 <div align="center">
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Alan_Stefanov-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/alanstefanov/)
-[![Email](https://img.shields.io/badge/Email-alan.emanuel.stefanov@gmail.com-red?style=flat-square&logo=gmail)](mailto:alan.emanuel.stefanov@gmail.com)
-[![GitHub](https://img.shields.io/badge/GitHub-AlanStefanov-black?style=flat-square&logo=github)](https://github.com/AlanStefanov)
 [![CI](https://github.com/AlanStefanov/bitbucket_repository_manager/actions/workflows/ci.yml/badge.svg)](https://github.com/AlanStefanov/bitbucket_repository_manager/actions/workflows/ci.yml)
-
-**Alan Stefanov** — Engineering Manager · DevOps Engineer · Software Developer · _La Plata, Argentina_
-
----
-
-</div>
-
-# Bitbucket Repository Manager
-
-<div align="center">
-
-![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20WSL-blue.svg)
-
-**Una herramienta CLI elegante para gestionar repositorios de Bitbucket Cloud**
+![Version](https://img.shields.io/badge/version-0.1.0--alpha-orange.svg)
 
 </div>
 
----
+# Bitbucket Repository Manager — `bbm`
 
-## ✨ Características
+Suite **TUI** para administración masiva de repositorios Bitbucket Cloud. Navegación 100% por teclado, multiplataforma, instalable vía `pipx`, Docker o Homebrew.
 
-- 📋 **Explorador de Repositorios** - Navega por todos tus repositorios de Bitbucket en una interfaz TUI intuitiva
-- 🔍 **Búsqueda en Tiempo Real** - Filtra repositorios al instante con el buscador integrado
-- 📦 **Clonado con Un Clic** - Clona repositorios directamente desde la interfaz
-- 🎯 **Indicador de Estado** - Visualiza rápidamente qué repositorios ya están clonados localmente
-- ⌨️ **Navegación por Teclado** - Control total con atajos de teclado eficientes
-- 🔐 **Autenticación Segura** - Token y credenciales guardados en `~/.config/brm/env` (nunca expuesto en código)
-- ⚙️ **Configuración Interactiva** - Pantalla de configuración inicial al primer uso: ingresa token, usuario y workspace sin tocar archivos
+Inspirado en [opencode](https://opencode.ai) — interfaz de terminal moderna, reactiva y productiva.
 
 ---
 
-## 🚀 Instalación
+## Tabla de Contenidos
 
-### Una línea (recomendado)
-
-```bash
-bash <(curl -fsSL https://github.com/AlanStefanov/bitbucket_repository_manager/raw/main/install.sh)
-```
-
-### Manual
-
-#### Prerrequisitos
-
-- **[Python 3.8+](https://www.python.org/downloads/)** — Lenguaje de programación
-- **[Git](https://git-scm.com/downloads)** — Control de versiones (para clonar repos)
-- **Acceso a Internet** — Para conectar con la API de Bitbucket
-
-<details>
-<summary><b>🐧 Linux (Debian/Ubuntu)</b></summary>
-
-```bash
-sudo apt update
-sudo apt install python3 python3-pip git -y
-```
-</details>
-
-<details>
-<summary><b>🍎 macOS</b></summary>
-
-```bash
-# Con Homebrew
-brew install python git
-```
-</details>
-
-<details>
-<summary><b>🪟 Windows (WSL)</b></summary>
-
-```bash
-# Instala WSL primero, luego en tu terminal Linux:
-sudo apt update && sudo apt install python3 python3-pip git -y
-```
-</details>
-
-1. **Clona o descarga este repositorio**
-
-2. **Instala dependencias Python:**
-
-```bash
-pip install requests
-```
-
-3. **Configura las credenciales de Bitbucket:**
-
-Hay tres formas de configurar el token:
-
-#### Opción A: Configuración interactiva (Nuevo)
-
-Ejecutá el programa y la primera vez te mostrará una pantalla para ingresar:
-
-- `BB_TOKEN` (enmascarado)
-- `BB_USERNAME`
-- `BB_WORKSPACE`
-
-Los datos se guardan en `~/.config/brm/env` automáticamente.
-
-#### Opción B: Archivo `.env`
-
-```bash
-cp .env.example .env
-# Edita .env y reemplaza los valores
-```
-
-El contenido de `.env` debe tener al menos:
-
-```
-BB_TOKEN=tu_token_de_bitbucket
-BB_USERNAME=tu-email@example.com
-BB_WORKSPACE=tu-workspace
-```
-
-#### Opción C: Variable de entorno
-
-```bash
-export BB_TOKEN="tu_token_de_bitbucket"
-export BB_USERNAME="tu-email@example.com"
-export BB_WORKSPACE="tu-workspace"
-python3 repository_manager.py
-```
-
-> ⚠️ **Nota:** El archivo `.env` y `~/.config/brm/env` contienen información sensible. Nunca los compartas.
-
-#### Variables de Entorno
-
-| Variable | Obligatorio | Descripción |
-|----------|-------------|-------------|
-| `BB_TOKEN` | ✅ Sí | Token de acceso personal de Bitbucket |
-| `BB_USERNAME` | ✅ Sí | Email o username de Bitbucket para autenticación |
-| `BB_WORKSPACE` | ✅ Sí | Workspace de Bitbucket (ej: `mi-empresa`) |
-| `DEV_DIR` | ❌ No | Directorio donde clonar repos (defecto: `~/bitbucket-repos`) |
-| `GIT_USER_NAME` | ❌ No | Nombre para git config en clones (defecto: `Your Name`) |
-| `GIT_USER_EMAIL` | ❌ No | Email para git config en clones (defecto: `your-email@example.com`) |
-
-#### ¿Cómo obtener tu token de Bitbucket?
-
-1. Ve a **Bitbucket Settings** → **Personal access tokens**
-2. Crea un nuevo token con los siguientes permisos:
-   - `repo:read` - Lectura de repositorios
-   - `workspace:read` - Lectura de workspaces
-   - `read:user` - Lectura de información de usuario
+- [Visión](#visión)
+- [Stack](#stack)
+- [Roadmap — User Stories](#roadmap--user-stories)
+- [Atajos de Teclado](#atajos-de-teclado)
+- [Instalación](#instalación)
+- [Publicación y Versionado](#publicación-y-versionado)
+- [Licencia](#licencia)
 
 ---
 
-## 📖 Uso
+## Visión
 
-### Ejecutar el programa
+De un explorador TUI simple a una **suite completa** para administrar Bitbucket Cloud desde la terminal:
 
-```bash
-./run.sh
-# O directamente
-python3 repository_manager.py
-```
+| Feature | Estado |
+|---------|--------|
+| Dashboard de workspace | ✅ Listo |
+| Explorador + clonado de repos | ✅ Listo |
+| Gestión masiva de permisos | 🚧 En desarrollo |
+| Auto-aprobación de PRs | 🚧 En desarrollo |
+| Migración entre proyectos | 🚧 En desarrollo |
+| Archivado inteligente | 🚧 En desarrollo |
+| Análisis de dependencias | 🚧 En desarrollo |
+| Publicación (PyPI, Docker, Brew) | 🚧 En desarrollo |
 
-### Atajos de Teclado
+Cada feature se despliega como una **pantalla TUI** accesible desde el menú principal, con operaciones masivas, dry-run y confirmación explícita.
+
+---
+
+## Stack
+
+| Capa | Librería |
+|------|----------|
+| **TUI Framework** | [Textual](https://textual.textualize.io/) 8.x — async, CSS-like styling, 24-bit color |
+| **HTTP / API** | `requests` — cliente REST para Bitbucket Cloud API v2.0 |
+| **YAML** | `pyyaml` — reglas de PR, archivado, dependencias |
+| **Terminal enhancements** | `rich` — logging, tablas, progreso |
+| **Distribución** | `pyproject.toml` → PyPI / `pipx` / Docker / Homebrew |
+
+### Por qué Textual
+
+- Async nativo (`asyncio`)
+- Estilos con TCSS (simil CSS, no curses)
+- Widgets modernos: `DataTable`, `Select`, `Input`, `Tree`
+- Hot-reload en desarrollo
+- Soporte para mouse + teclado
+- 24-bit color, emojis, renderizado rápido
+
+---
+
+## Roadmap — User Stories
+
+### US1: Gestión Masiva de Permisos
+
+Agregar, remover y sincronizar permisos de usuarios/grupos en N repositorios simultáneamente.
+
+- Listar permisos actuales de uno o varios repos
+- Grant/revoke con rol (READ, WRITE, ADMIN)
+- Copiar permisos de un repo origen a N destinos
+- Sincronizar desde CSV/YAML
+- Modo dry-run en todas las operaciones
+
+### US2: Auto-aprobación de PRs
+
+Reglas configurables en YAML para aprobar PRs automáticamente según branch, autor, etiquetas, archivos tocados.
+
+- Reglas por branch origen/destino, autor, labels, file pattern
+- Modo supervisado: agrupa candidatos y muestra antes de aprobar
+- Reporte de PRs aprobados/rechazados por regla
+- Config persistente en `pr_rules.yaml`
+
+### US3: Migración entre Proyectos
+
+Migrar repos entre workspaces preservando historial git, branches, tags y PRs abiertos.
+
+- Plan de migración preview
+- Push mirror con git
+- Re-creación de branch protections y webhooks
+- Rollback ante fallo parcial
+
+### US4: Archivado Inteligente
+
+Archivar repositorios inactivos según reglas configurables (último commit, PRs abandonados, N meses sin actividad).
+
+- Escaneo de candidatos por antigüedad
+- Archivado batch con confirmación
+- Preservación de config para restauración
+- Restaurar repos archivados
+
+### US5: Análisis de Dependencias Cruzadas
+
+Escanear dependencias entre repos del workspace mediante patrones de import en código fuente.
+
+- Grafo de dependencias (árbol / lista)
+- Detección de repos huérfanos (sin deps in/out)
+- Detección de ciclos
+- Reporte de impacto ante migración/archivado
+
+### US6: Publicación
+
+Distribuir `bbm` en los 3 canales principales para que cualquier admin lo instale en segundos.
+
+| Canal | Comando |
+|-------|---------|
+| PyPI / pipx | `pipx install bbm` |
+| Docker Hub | `docker pull alanstefanov/bbm` |
+| Homebrew | `brew install alanstefanov/tap/bbm` |
+
+---
+
+## Atajos de Teclado
+
+La app está diseñada para uso 100% con teclado. Sin mouse requerido.
+
+### Pantalla de inicio (Home)
 
 | Tecla | Acción |
 |-------|--------|
-| `↑` / `↓` | Navegar entre repositorios |
-| `k` / `j` | Navegar (vi-style) |
-| `Enter` | Ver detalles / Clonar repositorio |
-| `/` | Activar buscador |
-| `ESC` | Limpiar filtro de búsqueda |
-| `r` | Refrescar lista de repositorios |
-| `q` | Salir |
+| `↑` / `↓` | Navegar entre cards |
+| `←` / `→` | Navegar entre cards |
+| `Tab` / `Shift+Tab` | Navegar entre cards |
+| `Enter` / `Space` | Abrir pantalla seleccionada |
+| `D` | Dashboard |
+| `R` | Repos |
+| `P` | Permisos |
+| `U` | PRs |
+| `M` | Migración |
+| `A` | Archive |
+| `S` | Dependencias |
+| `Q` | Salir de la app |
+| `Esc` | Salir de la app |
+| `Ctrl+Q` | Salir de la app |
+
+### Pantallas de feature
+
+| Tecla | Acción |
+|-------|--------|
+| `H` | Volver al menú principal |
+| `Esc` | Volver al menú principal |
+| `Ctrl+Q` | Salir de la app |
+| `Tab` / `Shift+Tab` | Navegar entre controles |
+| `Ctrl+R` | Refrescar (Explorer / Dashboard) |
+
+### Controles comunes
+
+| Widget | Interacción |
+|--------|-------------|
+| `Input` | Escribir texto, `Enter` para confirmar |
+| `Select` | `↑↓` + `Enter` para elegir opción |
+| `DataTable` | `↑↓` para navegar filas |
+| `Button` | `Enter` o `Space` para accionar |
+| `Checkbox` | `Space` para toggle |
 
 ---
 
-## 🏗️ Estructura del Proyecto
+## Instalación
 
-```
-brm/
-├── repository_manager.py   # Código principal de la aplicación
-├── run.sh                  # Script de ejecución
-├── install.sh              # Instalador rápido (curl | bash)
-├── pyproject.toml           # Metadata para PyPI
-├── .env.example            # Ejemplo de configuración
-├── .gitignore              # Ignora archivos sensibles
-├── .github/workflows/      # CI (lint)
-└── README.md               # Este archivo
-```
-
----
-
-## 🔧 Configuración Adicional
-
-### Personalizar el directorio de desarrollo
-
-Por defecto, los repositorios se clonan en `~/bitbucket-repos`. Para cambiar esto:
+### pipx (recomendado)
 
 ```bash
-export DEV_DIR="/tu/directorio/de/proyectos"
-python3 repository_manager.py
+pipx install bbm
+bbm
 ```
 
-### Cambiar el workspace de Bitbucket
-
-Define el workspace via variable de entorno:
+### pip
 
 ```bash
-export BB_WORKSPACE="tu-workspace"
-python3 repository_manager.py
+pip install bbm
+bbm
 ```
 
----
+### Docker
 
-## 🐛 Solución de Problemas
-
-### Error: "BB_TOKEN no está configurado"
-
-Asegúrate de tener el token configurado:
 ```bash
-# Opción 1: Revisa la configuración guardada
-cat ~/.config/brm/env
+docker run --rm -it \
+  -v $PWD/.env:/app/.env \
+  alanstefanov/bbm
+```
 
-# Opción 2: Verifica que el archivo .env existe
-cat .env
+### Homebrew
 
-# Opción 3: Exporta las variables manualmente
-export BB_TOKEN="tu_token"
-export BB_USERNAME="tu-email@example.com"
-export BB_WORKSPACE="tu-workspace"
+```bash
+brew install alanstefanov/tap/bbm
+bbm
+```
+
+### Configuración rápida
+
+```bash
+cp .env.example .env
+# Editar .env con: BB_USERNAME, BB_TOKEN, BB_WORKSPACE
+bbm
+```
+
+O simplemente ejecutá `bbm` y la primera vez te mostrará una pantalla interactiva para ingresar los datos. Se guardan en `~/.config/bbm/env`.
+
+Variables requeridas:
+
+| Variable | Descripción |
+|----------|-------------|
+| `BB_USERNAME` | Email de Atlassian (NO username de Bitbucket) |
+| `BB_TOKEN` | API Token desde https://id.atlassian.com/manage-profile/security/api-tokens |
+| `BB_WORKSPACE` | Workspace de Bitbucket (ej: `mi-empresa`) |
+| `DEV_DIR` | Directorio para clones (opcional, defecto: `~/bitbucket-repos`) |
+
+### Ejecución desde el repo
+
+```bash
 ./run.sh
 ```
 
-También podés borrar `~/.config/brm/env` para que la app te muestre la pantalla de configuración inicial nuevamente.
-
-### Error: 401 - Unauthorized
-
-Tu token puede haber expirado. Genera uno nuevo en Bitbucket y actualiza la variable `BB_TOKEN`.
-
-### Error: 403 - Forbidden
-
-El token necesita permisos de lectura. Verifica que tenga los scopes `repo:read` y `workspace:read`.
+Si borrás `~/.config/bbm/env` la app te mostrará la pantalla de configuración inicial nuevamente.
 
 ---
 
-## 🤝 Contribuir
+## Publicación y Versionado
 
-¡Las contribuciones son bienvenidas! Por favor, abre un issue o PR en el repositorio.
+### Versionado Semántico
+
+`bbm` sigue [SemVer](https://semver.org/): `MAJOR.MINOR.PATCH`.
+
+- **MAJOR**: cambios incompatibles en API/UI
+- **MINOR**: nuevas features (backward-compatible)
+- **PATCH**: bugfixes, performance, docs
+
+La versión se define en `src/bbm/__init__.py` y se refleja en `pyproject.toml`.
+
+### Release automática
+
+Al hacer merge de un PR a `main`:
+
+1. **CI** corre lint + typecheck + tests
+2. **GitHub Actions** (o script manual) etiqueta con `v{version}`
+3. Se publica automáticamente a:
+   - **PyPI** via `twine`
+   - **Docker Hub** via `docker buildx + push`
+   - **Homebrew** actualizando la fórmula en `homebrew-tap`
+
+### Pipeline actual
+
+```yaml
+# .github/workflows/release.yml (futuro)
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    - build & publish to PyPI
+    - build & push Docker image
+    - update Homebrew formula
+    - create GitHub Release
+```
 
 ---
 
-## 📝 Licencia
+## Licencia
 
-Este proyecto está bajo la Licencia MIT — ve el archivo `LICENSE` para más detalles.
-
----
-
-## 🙏 Agradecimientos
-
-- [Atlassian](https://www.atlassian.com/) por Bitbucket Cloud
-- [Python](https://www.python.org/) por el lenguaje
-- [curses](https://docs.python.org/3/library/curses.html) por la interfaz de terminal
-
----
-
-*¿Te gusta este proyecto? ¡Échale un vistazo a mis otros trabajos en [GitHub](https://github.com/AlanStefanov)!*
+MIT — Alan Stefanov, 2026.
