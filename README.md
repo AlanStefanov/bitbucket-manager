@@ -211,6 +211,8 @@ cp .env.example .env
 bbm
 ```
 
+O simplemente ejecutá `bbm` y la primera vez te mostrará una pantalla interactiva para ingresar los datos. Se guardan en `~/.config/bbm/env`.
+
 Variables requeridas:
 
 | Variable | Descripción |
@@ -225,6 +227,8 @@ Variables requeridas:
 ```bash
 ./run.sh
 ```
+
+Si borrás `~/.config/bbm/env` la app te mostrará la pantalla de configuración inicial nuevamente.
 
 ---
 

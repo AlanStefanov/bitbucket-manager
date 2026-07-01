@@ -1,6 +1,6 @@
 # Environment variables (contains sensitive data)
 .env
-*.env
+.env.*
 
 # Python
 __pycache__/
@@ -27,6 +27,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local runtime / secrets
+publish.sh
 
 # Local planning docs (not for remote)
 docs/
