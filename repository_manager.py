@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+VERSION = "1.0.0"
 import subprocess
 import os
 import requests
@@ -7,7 +8,17 @@ import curses
 import time
 from datetime import datetime
 
-def load_env_file():
+CONFIG_DIR = os.path.expanduser("~/.config/brm")
+CONFIG_FILE = os.path.join(CONFIG_DIR, "env")
+
+def _load_env_file():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    os.environ.setdefault(key.strip(), value.strip())
     env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
     if os.path.exists(env_path):
         with open(env_path, 'r') as f:
@@ -17,12 +28,15 @@ def load_env_file():
                     key, value = line.split('=', 1)
                     os.environ.setdefault(key.strip(), value.strip())
 
-load_env_file()
+def _set_config():
+    global USERNAME, DEV_DIR, BB_TOKEN, BB_AUTH
+    USERNAME = os.environ.get("BB_WORKSPACE", "your-workspace")
+    DEV_DIR = os.environ.get("DEV_DIR", os.path.join(os.path.expanduser("~"), "bitbucket-repos"))
+    BB_TOKEN = os.environ.get("BB_TOKEN")
+    BB_AUTH = (os.environ.get("BB_USERNAME"), BB_TOKEN) if BB_TOKEN else (None, None)
 
-USERNAME = os.environ.get("BB_WORKSPACE", "your-workspace")
-DEV_DIR = os.environ.get("DEV_DIR", os.path.join(os.path.expanduser("~"), "bitbucket-repos"))
-BB_TOKEN = os.environ.get("BB_TOKEN")
-BB_AUTH = (os.environ.get("BB_USERNAME"), BB_TOKEN) if BB_TOKEN else (None, None)
+_load_env_file()
+_set_config()
 
 def get_repos():
     if not BB_AUTH[1]:
@@ -154,9 +168,124 @@ def search_repos(stdscr, repos):
     curses.curs_set(0)
     return search_query
 
+def config_screen(stdscr):
+    curses.curs_set(1)
+    h, w = stdscr.getmaxyx()
+
+    fields = [
+        ["BB_TOKEN", "", True],
+        ["BB_USERNAME", "", False],
+        ["BB_WORKSPACE", "", False],
+    ]
+    current_field = 0
+    in_buttons = False
+    button_idx = 0
+    buttons = ["Guardar", "Salir"]
+
+    while True:
+        stdscr.clear()
+        title = "BRM — Configuración Inicial"
+        try:
+            stdscr.addstr(1, (w - len(title)) // 2, title, curses.A_BOLD)
+        except curses.error:
+            pass
+        try:
+            stdscr.addstr(2, 0, "=" * (w - 1))
+        except curses.error:
+            pass
+
+        for i, (label, value, masked) in enumerate(fields):
+            y = 4 + i * 2
+            display = "*" * len(value) if masked else value
+            label_text = f"{label}: "
+            try:
+                stdscr.addstr(y, 4, label_text)
+                if not in_buttons and i == current_field:
+                    stdscr.addstr(y, 4 + len(label_text), f"[{display}]", curses.A_REVERSE)
+                else:
+                    stdscr.addstr(y, 4 + len(label_text), f"[{display}]")
+            except curses.error:
+                pass
+
+        for i, btn in enumerate(buttons):
+            y = 11
+            x = 10 + i * 15
+            try:
+                if in_buttons and i == button_idx:
+                    stdscr.addstr(y, x, f"<{btn}>", curses.A_REVERSE)
+                else:
+                    stdscr.addstr(y, x, f" {btn} ")
+            except curses.error:
+                pass
+
+        try:
+            stdscr.addstr(h - 2, 2, "Tab: cambiar campo  ↑↓ navegar  Enter: confirmar  Esc: salir")
+        except curses.error:
+            pass
+        stdscr.refresh()
+
+        key = stdscr.getch()
+
+        if key == 9:
+            if not in_buttons:
+                if current_field < len(fields) - 1:
+                    current_field += 1
+                else:
+                    in_buttons = True
+                    button_idx = 0
+            else:
+                if button_idx < len(buttons) - 1:
+                    button_idx += 1
+                else:
+                    in_buttons = False
+                    current_field = 0
+        elif key == curses.KEY_UP:
+            if in_buttons:
+                in_buttons = False
+                current_field = len(fields) - 1
+            elif current_field > 0:
+                current_field -= 1
+        elif key == curses.KEY_DOWN:
+            if not in_buttons:
+                if current_field < len(fields) - 1:
+                    current_field += 1
+                else:
+                    in_buttons = True
+                    button_idx = 0
+        elif key == 10:
+            if in_buttons:
+                if button_idx == 0:
+                    if all(f[1] for f in fields):
+                        os.makedirs(CONFIG_DIR, exist_ok=True)
+                        with open(CONFIG_FILE, 'w') as f:
+                            for label, value, _ in fields:
+                                f.write(f"{label}={value}\n")
+                        _load_env_file()
+                        _set_config()
+                        curses.curs_set(0)
+                        return True
+                else:
+                    curses.curs_set(0)
+                    return False
+        elif key == 27:
+            curses.curs_set(0)
+            return False
+        elif not in_buttons and current_field < len(fields):
+            label, value, masked = fields[current_field]
+            if key in (127, curses.KEY_BACKSPACE):
+                value = value[:-1]
+            elif 32 <= key <= 126:
+                if len(value) < 128:
+                    value += chr(key)
+            fields[current_field] = [label, value, masked]
+
 def main(stdscr):
     curses.curs_set(0)
-    
+
+    if not BB_TOKEN:
+        if not config_screen(stdscr):
+            return
+
     print("Cargando repositorios de Bitbucket...")
     repos = get_repos()
     
@@ -233,7 +362,7 @@ def main(stdscr):
         elif key == ord('k'):
             selected = max(0, selected - 1)
     
-if __name__ == "__main__":
+def cli():
     os.environ.setdefault('TERM', 'xterm-256color')
     try:
         curses.wrapper(main)
@@ -241,3 +370,6 @@ if __name__ == "__main__":
         print("\nError: No se puede inicializar curses en este entorno.")
         print("Ejecuta el script en una terminal interactiva.")
         sys.exit(1)
+
+if __name__ == "__main__":
+    cli()

@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "brm"
+dynamic = ["version"]
+description = "Bitbucket Repository Manager — TUI para gestionar repositorios de Bitbucket"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+  {name = "Alan Stefanov", email = "alan.emanuel.stefanov@gmail.com"}
+]
+requires-python = ">=3.8"
+dependencies = [
+  "requests",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: MacOS :: MacOS X",
+]
+
+[project.urls]
+Homepage = "https://github.com/AlanStefanov/bitbucket_repository_manager"
+Repository = "https://github.com/AlanStefanov/bitbucket_repository_manager"
+
+[project.scripts]
+brm = "repository_manager:cli"
+
+[tool.setuptools.dynamic]
+version = {attr = "repository_manager.VERSION"}
+
+[tool.setuptools]
+py-modules = ["repository_manager"]

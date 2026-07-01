@@ -1,15 +1,14 @@
 # Environment variables (contains sensitive data)
 .env
-*.env
+.env.*
 
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-ENV/
+*.egg-info/
+dist/
+build/
+*.egg
 
 # OS
 .DS_Store
@@ -24,3 +23,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local runtime / secrets
+publish.sh

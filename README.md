@@ -32,20 +32,26 @@
 - 📦 **Clonado con Un Clic** - Clona repositorios directamente desde la interfaz
 - 🎯 **Indicador de Estado** - Visualiza rápidamente qué repositorios ya están clonados localmente
 - ⌨️ **Navegación por Teclado** - Control total con atajos de teclado eficientes
-- 🔐 **Autenticación Segura** - Token pasado por variable de entorno (nunca expuesto en código)
+- 🔐 **Autenticación Segura** - Token y credenciales guardados en `~/.config/brm/env` (nunca expuesto en código)
+- ⚙️ **Configuración Interactiva** - Pantalla de configuración inicial al primer uso: ingresa token, usuario y workspace sin tocar archivos
 
 ---
 
 ## 🚀 Instalación
 
-### Prerrequisitos
+### Una línea (recomendado)
+
+```bash
+bash <(curl -fsSL https://github.com/AlanStefanov/bitbucket_repository_manager/raw/main/install.sh)
+```
+
+### Manual
+
+#### Prerrequisitos
 
 - **[Python 3.8+](https://www.python.org/downloads/)** — Lenguaje de programación
 - **[Git](https://git-scm.com/downloads)** — Control de versiones (para clonar repos)
-- **[pip](https://pip.pypa.io/en/stable/installation/)** — Gestor de paquetes de Python
 - **Acceso a Internet** — Para conectar con la API de Bitbucket
-
-#### Instalación por sistema operativo
 
 <details>
 <summary><b>🐧 Linux (Debian/Ubuntu)</b></summary>
@@ -74,8 +80,6 @@ sudo apt update && sudo apt install python3 python3-pip git -y
 ```
 </details>
 
-### Configuración
-
 1. **Clona o descarga este repositorio**
 
 2. **Instala dependencias Python:**
@@ -86,17 +90,26 @@ pip install requests
 
 3. **Configura las credenciales de Bitbucket:**
 
-Hay dos formas de configurar el token:
+Hay tres formas de configurar el token:
 
-#### Opción A: Archivo `.env` (Recomendado)
+#### Opción A: Configuración interactiva (Nuevo)
+
+Ejecutá el programa y la primera vez te mostrará una pantalla para ingresar:
+
+- `BB_TOKEN` (enmascarado)
+- `BB_USERNAME`
+- `BB_WORKSPACE`
+
+Los datos se guardan en `~/.config/brm/env` automáticamente.
+
+#### Opción B: Archivo `.env`
 
 ```bash
-# Copia el ejemplo y configura tu token
 cp .env.example .env
-# Edita el archivo .env y reemplaza tu_token_aqui con tu token real
+# Edita .env y reemplaza los valores
 ```
 
-El contenido de `.env` debe tener al menos estas variables (usa `.env.example` como guía):
+El contenido de `.env` debe tener al menos:
 
 ```
 BB_TOKEN=tu_token_de_bitbucket
@@ -104,17 +117,16 @@ BB_USERNAME=tu-email@example.com
 BB_WORKSPACE=tu-workspace
 ```
 
-#### Opción B: Variable de entorno
+#### Opción C: Variable de entorno
 
 ```bash
-# Exporta el token (añade esto a tu ~/.bashrc o ~/.zshrc para persistencia)
 export BB_TOKEN="tu_token_de_bitbucket"
-
-# O ejecuta directamente antes de correr el programa
-BB_TOKEN="tu_token_de_bitbucket" python3 repository_manager.py
+export BB_USERNAME="tu-email@example.com"
+export BB_WORKSPACE="tu-workspace"
+python3 repository_manager.py
 ```
 
-> ⚠️ **Nota:** El archivo `.env` contiene información sensible y está excluido del repositorio (`gitignore`). Nunca compartas este archivo.
+> ⚠️ **Nota:** El archivo `.env` y `~/.config/brm/env` contienen información sensible. Nunca los compartas.
 
 #### Variables de Entorno
 
@@ -164,13 +176,15 @@ python3 repository_manager.py
 ## 🏗️ Estructura del Proyecto
 
 ```
-bitbucket-repo-manager/
+brm/
 ├── repository_manager.py   # Código principal de la aplicación
 ├── run.sh                  # Script de ejecución
-├── .env                    # Tu configuración (NO subir a git)
+├── install.sh              # Instalador rápido (curl | bash)
+├── pyproject.toml           # Metadata para PyPI
 ├── .env.example            # Ejemplo de configuración
-├── README.md               # Este archivo
-└── .gitignore              # Ignora archivos sensibles
+├── .gitignore              # Ignora archivos sensibles
+├── .github/workflows/      # CI (lint)
+└── README.md               # Este archivo
 ```
 
 ---
@@ -203,13 +217,20 @@ python3 repository_manager.py
 
 Asegúrate de tener el token configurado:
 ```bash
-# Opción 1: Verifica que el archivo .env existe
+# Opción 1: Revisa la configuración guardada
+cat ~/.config/brm/env
+
+# Opción 2: Verifica que el archivo .env existe
 cat .env
 
-# Opción 2: O exporta la variable manualmente
+# Opción 3: Exporta las variables manualmente
 export BB_TOKEN="tu_token"
+export BB_USERNAME="tu-email@example.com"
+export BB_WORKSPACE="tu-workspace"
 ./run.sh
 ```
+
+También podés borrar `~/.config/brm/env` para que la app te muestre la pantalla de configuración inicial nuevamente.
 
 ### Error: 401 - Unauthorized
 
