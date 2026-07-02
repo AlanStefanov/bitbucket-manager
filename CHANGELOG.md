@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v0.5.0 (2026-07-02)
+
+### Feature
+
+* feat: add setup screen for initial credential entry
+
+- Add SetupScreen with form for BB_TOKEN, BB_USERNAME, BB_WORKSPACE, DEV_DIR
+- Auto-redirect to SetupScreen when config is missing
+- Fix pyproject.toml: add [tool.setuptools.package-data] for styles.tcss
+- Add TCSS styles for setup screen
+- Bump version to 0.5.0 ([`6fc9c81`](https://github.com/AlanStefanov/bitbucket-manager/commit/6fc9c816168dba96ead9f707fda273ddf10c50f7))
+
 ## v0.4.3 (2026-07-02)
 
 ### Chore
