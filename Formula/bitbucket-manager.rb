@@ -3,8 +3,8 @@ class BitbucketManager < Formula
 
   desc "TUI suite for managing Bitbucket Cloud from the terminal"
   homepage "https://github.com/AlanStefanov/bitbucket-manager"
-  url "https://github.com/AlanStefanov/bitbucket-manager/archive/refs/tags/v0.4.1.tar.gz"
-  sha256 "1264c5bb8d5652db7aad125cc13bd92804eb2985bb9df5d47acfed0c11d0e18e"
+  url "https://github.com/AlanStefanov/bitbucket-manager/archive/refs/tags/v0.4.2.tar.gz"
+  sha256 "9f416fa948b80318e5b8d88d0a7f3d51a17ad6ee263c1d7b4522ab1feb6eeb31"
   license "MIT"
 
   depends_on "python@3.12"
